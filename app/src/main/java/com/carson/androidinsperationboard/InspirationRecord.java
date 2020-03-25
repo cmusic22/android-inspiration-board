@@ -46,6 +46,8 @@ public class InspirationRecord {
         this.hashtag = hashtag;
     }
 
+    //image
+
     @Override
     public String toString(){
         return "InspirationRecord{" +
