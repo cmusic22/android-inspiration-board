@@ -1,0 +1,16 @@
+<resources>
+    //Home Strings
+    <string name="app_name">Android Inspiration Board</string>
+    <string name="enter_inspiration">Enter Your Insperation</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="enter_hashtag">#EnterHashtag</string>
+    <string name="save_inspiration">Save Inspiration</string>
+    <string name="view_inspiration_list">View List</string>
+    //List Strings
+    <string name="search_button_text">Go!</string>
+    <string name="search_hashtags">#EnterHashtag to Search</string>
+
+    //Detail Strings
+    <string name="home_button_text">Enter Inspiration</string>
+    <string name="delete_button_text">Delete Inspiration</string>
+</resources>
