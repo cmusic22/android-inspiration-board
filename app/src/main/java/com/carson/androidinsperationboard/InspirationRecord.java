@@ -1,6 +1,10 @@
 package com.carson.androidinsperationboard;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
@@ -9,24 +13,26 @@ public class InspirationRecord {
 
     @PrimaryKey
     @NonNull
-    private Date date;
+    private String date;
     private String inspiration;
     private String hashtag;
+    private Bitmap bitmap;
     //image column
 
-    public InspirationRecord(@NonNull Date date, String inspiration, String hashtag { //image column)
+    public InspirationRecord(@NonNull String date, String inspiration, String hashtag, Bitmap bitmap ){ //image column)
         this.date = date;
         this.inspiration = inspiration;
         this.hashtag = hashtag;
-        //image
+        this.bitmap = bitmap;
     }
 
     @NonNull
-    public Date getDate() {
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(@NonNull Date date) {
+    public void setDate(@NonNull String date) {
         this.date = date;
     }
 
@@ -46,12 +52,14 @@ public class InspirationRecord {
         this.hashtag = hashtag;
     }
 
-    //image
+    public Bitmap getBitmap() {return bitmap;}
+
+    public void setBitmap(Bitmap bitmap) {this.bitmap = bitmap; }
 
     @Override
     public String toString(){
-        return "InspirationRecord{" +
-                "inspiration" + inspiration +
-                "hashtag=" + hashtag + "}"; //need to add picture bitmap to string
+        return "InspirationRecord{" + "date=" + date +
+                "inspiration=" + inspiration +
+                "hashtag=" + hashtag + "bitmap=" + bitmap"}"; //need to add picture bitmap to string
     }
 }

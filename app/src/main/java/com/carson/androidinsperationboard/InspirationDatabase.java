@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase;
 public abstract class InspirationDatabase extends RoomDatabase {
     private static volatile InspirationDatabase INSTANCE;
 
-    public abstract InspirationDAO inspirationDAO; //abstract method
+    public InspirationDAO inspirationDAO; //abstract method
 
     static InspirationDatabase getDatabase(final Context context) {
         if (INSTANCE ==null) {

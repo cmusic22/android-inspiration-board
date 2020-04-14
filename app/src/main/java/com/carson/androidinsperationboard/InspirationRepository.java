@@ -24,7 +24,7 @@ public class InspirationRepository {
 
     public void insert(InspirationRecord record){
         //insert record asynchronously
-        mew InsertInspirationAsync(inspirationDAO).execute(record);
+        new InsertInspirationAsync(inspirationDAO).execute(record);
     }
 
     static class InsertInspirationAsync extends AsyncTask<InspirationRecord, Void, Void> {
@@ -42,9 +42,6 @@ public class InspirationRepository {
         }
     }
 
-    //getAllRecords ?
-    //getDetailRecord ?
-
 
     public void delete(InspirationRecord record){
         //delete record asynchronously
@@ -61,7 +58,7 @@ public class InspirationRepository {
 
         @Override
         protected Void doInBackground(InspirationRecord... inspirationRecords){
-            inspirationDAO.delete(inspirationRecords);
+            inspirationDAO.deleteInspiration(inspirationRecords);
             return null;
         }
 
@@ -75,8 +72,8 @@ public class InspirationRepository {
         return inspirationDAO.getDetailRecord(date);
     }
 
-    public LiveData<InspirationRecord> deleteRecord(Date date){
-        return inspirationDAO.deleteRecord(date);
+    public LiveData<InspirationRecord> deleteInspiration(Date date){
+        return inspirationDAO.deleteInspiration(date);
     }
 
 }

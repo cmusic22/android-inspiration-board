@@ -22,6 +22,11 @@ import java.util.List;
 
 public class InsperationList extends Fragment {
 
+    private static final String TAG = "INSPERATION_LIST";
+
+    private InspirationViewModel inspierationViewModel;
+    private InspirationRecord inspirationRecord;
+
     private Button mSearchButton;
     private EditText mSearchHashtagEntry;
     private RecyclerView mInspirationList;
@@ -36,39 +41,24 @@ public class InsperationList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_insperation_list, container, false);
-
+        List<InspirationRecord> inspirations = getAllRecords();
         mSearchButton = v.findViewById(R.id.search_button);
         mSearchHashtagEntry = v.findViewById(R.id.search_hashtags_entry);
         mInspirationList = v.findViewById(R.id.inspiration_list);
-        mInspirationList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        mInspirationList.setLayoutManager(new LinearLayoutManager(getActivity()).getAllRecords(InspirationViewModel.class));
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSearchHashtagEntry.getText();
-                //search hastags
+                mSearchHashtagEntry.getText().toString();
+
             }
         });
-        updateUI();
+
         return v;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-         updateUI();
-    }
-
-    private void updateUI() {
-        //get inpirationLab class to getActivity
-        //create liste List<Inspiration> inspirations = inspirationLab.getInspirations();
-
-        if (mAdapter == null) {
-            mAdapter = new InspirationAdapter(inspirations);
-            mInspirationList.setAdapter(mAdapter);
-        }else{
-            mAdapter.notifyDataSetChanged();
-        }
-    }
 
     private class InspirationHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -94,13 +84,13 @@ public class InsperationList extends Fragment {
             mInspirationText.setText(mInspirationRecord.getInspiration());
             mInspirationHashtag.setText(mInspirationRecord.getHashtag());
             mInspirationDate.setText(mInspirationRecord.getDate());
-            mInspirationImage.setImage(mInspirationRecord.getImage());
+            mInspirationImage.setImageBitmap(mInspirationRecord.getBitmap());
 
         }
 
         @Override
         public void onClick (View v) {
-        Intent intent = MainActivity.newIntent(getActivity(), mInspirationRecord.getId());
+        Intent intent = MainActivity.newIntent(getActivity(), mInspirationRecord);
         startActivity(intent);
         }
     }

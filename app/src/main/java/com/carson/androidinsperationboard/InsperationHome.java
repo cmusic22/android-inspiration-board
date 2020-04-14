@@ -2,12 +2,16 @@ package com.carson.androidinsperationboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +20,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class InsperationHome extends Fragment {
 
+    private static final String TAG = "INSPERATION_HOME";
+
+    private InspirationViewModel insperationViewModel;
+    private InspirationRecord inspirationRecord;
+
     //components
-    private EditText mEnterInpiration;
+    private EditText mEnterInspiration;
     private EditText mEnterHashtag;
     private ImageView mInspirationThumbnail;
     private Button mTakePictureButton;
     private Button mInspirationListButton;
     private Button mSaveInspirationButton;
+    private String mDate;
 
 
     private static int REQUEST_CODE_TAKE_PICTURE = 0;
@@ -35,28 +48,21 @@ public class InsperationHome extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
-    /*public static InsperationHome newInstance(String param1, String param2) {
-
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_insperation_home, container, false);
 
-        mEnterInpiration = v.findViewById(R.id.enter_inspiration);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+
+        mEnterInspiration = v.findViewById(R.id.enter_inspiration);
         mEnterHashtag = v.findViewById(R.id.enter_hashtag);
         mInspirationThumbnail = v.findViewById(R.id.inspiration_thumbnail);
         mTakePictureButton = v.findViewById(R.id.take_picture_button);
         mSaveInspirationButton = v.findViewById(R.id.save_inspiration_button);
         mInspirationListButton = v.findViewById(R.id.view_inspiration_list_button);
+
+        mDate = sdf.format(new Date());
 
         mTakePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,35 +99,44 @@ public class InsperationHome extends Fragment {
         }
     }
 
-    private void saveInspiration(){
-        //save inspiration
-    }
-
-    private void goToInspirationFragment(){
-        //go to Insperation List
-    }
-
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == REQUEST_CODE_TAKE_PICTURE && resultCode == REULTS_OK){
+            Bitmap thumbnail = data.getParcelableExtra("data");
+            mInspirationThumbnail.setImageBitmap(thumbnail);
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    private void saveInspiration(){
+        mEnterInspiration.getText().toString();
+        mEnterHashtag.getText().toString();
+        //mInspirationThumbnail.
+
+        //set records
+        inspirationRecord.setDate(mDate);
+        inspirationRecord.setInspiration(mEnterInspiration);
+        inspirationRecord.setHashtag(mEnterHashtag);
+        inspirationRecord.setBitmap(mInspirationThumbnail);
+        insperationViewModel.update(inspirationRecord);
+
+        Log.d(TAG,"Updated insperation record");
+
+        //clear fields
+
+        mEnterInspiration.getText().clear();
+        mEnterHashtag.getText().clear();
+        mInspirationThumbnail.getBitmap().clear();
+
+    }
+
+    private void goToInspirationFragment(){
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.fragment_container, insperationList);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 }

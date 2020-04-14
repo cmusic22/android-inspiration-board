@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Date;
+
 
 public class InsperationDetail extends Fragment {
 
+    private static final String TAG = "INSPERATION_DETAIL";
+    //need to get database string/key
+    private InsperationHome insperationHome;
 
     private TextView mInsperationText;
     private TextView mHashtagText;
@@ -24,27 +31,16 @@ public class InsperationDetail extends Fragment {
     private Button mDeleteButton;
 
 
+
     public InsperationDetail() {
         // Required empty public constructor
     }
 
 
-    /*/ TODO: Rename and change types and number of parameters
-    public static InsperationDetail newInstance(String param1, String param2) {
-        InsperationDetail fragment = new InsperationDetail();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
 
     }
 
@@ -52,6 +48,7 @@ public class InsperationDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_insperation_detail, container, false);
+        //pull in ability to target insperationHome = v.find
 
         mInsperationText = v.findViewById(R.id.inspiration_text);
         mHashtagText = v.findViewById(R.id.hashtag_text);
@@ -59,27 +56,23 @@ public class InsperationDetail extends Fragment {
         mHomeButton = v.findViewById(R.id.home_button);
         mDeleteButton = v.findViewById(R.id.delete_button);
 
-
-        //image, inspiration & hashtag text will be served in the saved state
+        mInsperationText.setText(InspirationRecord.getInspiration());
+        mHashtagText.setText(InspirationRecord.getHashtag());
+        mInspirationPhotoDetail.setImageBitmap(InspirationRecord.getBitmap());
 
         mHomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //bring user to home fragment
+                bringHome();
             }
         });
 
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //delete inspiration from database
+                deleteInspiration(mDate);
             }
         });
-
-
-
-
-
 
 
         // Inflate the layout for this fragment
@@ -87,28 +80,25 @@ public class InsperationDetail extends Fragment {
     }
 
 
+    private void bringHome() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
-
-
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        ft.replace(R.id.fragment_container, insperationHome);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    private void deleteInspiration(Date date){
+
+        InspirationDAO.deleteInspiration (date);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.fragment_container, insperationHome);
+        ft.addToBackStack(null);
+        ft.commit();
     }
-*/
-
-
 
 }
